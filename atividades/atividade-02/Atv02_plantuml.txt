@@ -1,0 +1,117 @@
+@startuml
+
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "TB_MEDIA_TYPES" as e01 {
+  *id : INTEGER
+  --
+  Name : NVARCHAR(120)
+}
+
+entity "TB_GENRES" as e02 {
+  *id : INTEGER
+  --
+  Name : NVARCHAR(120)
+}
+
+entity "TB_PLAYLISTS" as e03 {
+  *id : INTEGER
+  --
+  Name : NVARCHAR(120)
+}
+
+entity "TB_PLAYLIST_TRACK" as e04 {
+  PlaylistId : INTEGER <<FK>>
+  TrackId : INTEGER <<FK>>
+}
+
+entity "TB_TRACKS" as e05 {
+  *id : INTEGER
+  --
+  Name : NVARCHAR(200)
+  AlbumId : INTEGER <<FK>>
+  MediaTypeId : INTEGER <<FK>>
+  GenreId : INTEGER <<FK>>
+  Composer : NVARCHAR(220)
+  Milliseconds : INTEGER
+  Bytes : INTEGER
+  UnitPrice : NUMERIC
+}
+
+entity "TB_ARTISTS" as e06 {
+  *id : INTEGER
+  --
+  Name : NVARCHAR(120)
+}
+
+entity "TB_INVOICES" as e07 {
+  *id : INTEGER
+  --
+  CustomerId : INTEGER <<FK>>
+  InvoiceDate : DATETIME
+  BillingAddress : NVARCHAR(70)
+  BillingCity : NVARCHAR(40)
+}
+
+entity "TB_INVOICE_ITEMS" as e08 {
+  *id : INTEGER
+  --
+  InvoiceId : INTEGER <<FK>>
+  TrackId : INTEGER <<FK>>
+  UnitPrice : NUMERIC
+  Quantity : INTEGER
+}
+
+entity "TB_ALBUMS" as e09 {
+  *id : INTEGER
+  --
+  Title : NVARCHAR(160)
+  ArtistId : INTEGER <<FK>>
+}
+
+entity "TB_CUSTOMERS" as e10 {
+  *id : INTEGER
+  --
+  FirstName : NVARCHAR(40)
+  LastName : NVARCHAR(20)
+  Company : NVARCHAR(80)
+  Address : NVARCHAR(70)
+  City : NVARCHAR(40)
+  State : NVARCHAR(40)
+  Country : NVARCHAR(40)
+  PostalCode : NVARCHAR(10)
+  Phone : NVARCHAR(24)
+  Fax : NVARCHAR(24)
+  Email : NVARCHAR(60)
+  SupportRepId : INTEGER <<FK>>
+}
+
+entity "TB_EMPLOYEES" as e11 {
+  *id : INTEGER
+  --
+  LastName : NVARCHAR(20)
+  FirstName : NVARCHAR(20)
+  Title : NVARCHAR(30)
+  ReportsTo : INTEGER <<FK>>
+  BirthDate : DATETIME
+  HireDate : DATETIME
+  Address : NVARCHAR(70)
+}
+
+e01 ||--o{ e05
+e02 |o--o{ e05
+e03 ||--o| e04
+e04 |o--|| e05
+e05 ||--o{ e08
+e05 }o--o| e09
+e07 ||--o{ e08
+e07 }o-|| e10
+e09 }o--|| e06
+e10 }o--o| e11
+e11 |o--o{ e11
+
+@enduml
